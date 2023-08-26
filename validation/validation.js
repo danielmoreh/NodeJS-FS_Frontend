@@ -1,32 +1,15 @@
+const isEmail = (email) => {
+  // Regex for email validation
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
+
 const validateSignupData = (body) => {
   let errors = {};
 
-  // If the first name is empty or shorter than 2 characters
-  if (
-    !body.firstName ||
-    body.firstName.trim() === "" ||
-    body.firstName.length < 2
-  ) {
-    errors.firstName = "First name must be at least 2 characters long";
-  }
-
-  // If the last name is empty or shorter than 2 characters
-  if (
-    !body.lastName ||
-    body.lastName.trim() === "" ||
-    body.lastName.length < 2
-  ) {
-    errors.lastName = "Last name must be at least 2 characters long";
-  }
-
-  // Check that the first name contains only letters
-  if (!/^[a-zA-Z]+$/.test(body.firstName)) {
-    errors.firstName = "First name must contain only letters";
-  }
-
-  // Check that the last name contains only letters
-  if (!/^[a-zA-Z]+$/.test(body.lastName)) {
-    errors.lastName = "Last name must contain only letters";
+  //if the name is empty or shorter than 3 characters
+  if (!body.name || body.name.trim() === "" || body.name.length < 3) {
+    errors.name = "Name must be at least 3 characters long";
   }
 
   // If the email is empty or not a valid email
@@ -37,6 +20,15 @@ const validateSignupData = (body) => {
   // If the password is empty or shorter than 8 characters
   if (!body.password || body.password === "" || body.password.length < 8) {
     errors.password = "Password must be at least 8 characters long";
+  }
+
+  // If the passwordConfirm is not the same as the password
+  if (
+    !body.passwordConfirm ||
+    body.passwordConfirm === "" ||
+    body.passwordConfirm !== body.password
+  ) {
+    errors.passwordConfirm = "Passwords must match";
   }
 
   return errors;

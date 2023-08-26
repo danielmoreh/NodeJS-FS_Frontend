@@ -5,16 +5,31 @@ const postSignupData = async (body) => {
     const response = await axios.post(
       "http://127.0.0.1:3000/api/v1/users/sign-up",
       {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: req.body.password,
+        name: body.name,
+        email: body.email,
+        password: body.password,
+        passwordConfirm: body.passwordConfirm,
       }
     );
     return response;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
-module.exports = { postSignupData };
+const postLoginData = async (body) => {
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:3000/api/v1/users/login",
+      {
+        email: body.email,
+        password: body.password,
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = { postSignupData, postLoginData };

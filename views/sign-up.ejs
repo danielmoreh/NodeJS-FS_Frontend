@@ -48,10 +48,12 @@
             <form
               class="form-signup"
               id="contactForm"
-              data-sb-form-api-token="http://127.0.0.1:3000/api/v1/users"
               action="/sign-up"
               method="POST"
             >
+              <% if(typeof(message) != 'undefined') {%>
+              <h4 style="color: red"><%=message%></h4>
+              <% } %>
               <!-- Email address input -->
               <div class="mb-3">
                 <label for="emailAddress" class="form-label"
@@ -64,34 +66,25 @@
                   name="email"
                   placeholder="Enter email..."
                   aria-label="Enter email..."
-                  data-sb-validations="required,email"
                 />
+                <% if(typeof(errs) != 'undefined') {%>
+                <span style="color: red"><%=errs.email%></span>
+                <% } %>
               </div>
-              <!-- First name input -->
+              <!-- name input -->
               <div class="mb-3">
-                <label for="first name" class="form-label">First Name</label>
+                <label for="name" class="form-label">Name</label>
                 <input
                   class="form-control"
-                  id="first"
+                  id="name"
                   type="text"
                   name="name"
-                  placeholder="First name..."
-                  aria-label="First name..."
-                  data-sb-validations="required,First name"
+                  placeholder="Enter your name..."
+                  aria-label="Enter your name..."
                 />
-              </div>
-              <!-- Last name input -->
-              <div class="mb-3">
-                <label for="last name" class="form-label">Last Name</label>
-                <input
-                  class="form-control"
-                  id="lastName"
-                  type="text"
-                  name="name"
-                  placeholder="Last name..."
-                  aria-label="Last name..."
-                  data-sb-validations="required,Last name"
-                />
+                <% if(typeof(errs) != 'undefined') {%>
+                <span style="color: red"><%=errs.name%></span>
+                <% } %>
               </div>
               <!-- Password input -->
               <div class="mb-3">
@@ -103,8 +96,26 @@
                   name="password"
                   placeholder="Enter password..."
                   aria-label="Enter password..."
-                  data-sb-validations="required,password"
                 />
+                <% if(typeof(errs) != 'undefined') {%>
+                <span style="color: red"><%= errs.password %></span>
+                <% } %>
+              </div>
+              <div class="mb-3">
+                <label for="passwordConfirm" class="form-label"
+                  >Password Confirm</label
+                >
+                <input
+                  class="form-control"
+                  id="passwordConfirm"
+                  type="password"
+                  name="passwordConfirm"
+                  placeholder="Confirm password..."
+                  aria-label="Confirm password..."
+                />
+                <% if(typeof(errs) != 'undefined') {%>
+                <span style="color: red"><%=errs.passwordConfirm%></span>
+                <% } %>
               </div>
               <!-- Sign up button -->
               <div class="text-center">

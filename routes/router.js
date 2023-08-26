@@ -6,43 +6,64 @@ const {
 } = require("../validation/validation");
 const { isEmpty } = require("../utilities/util");
 const messages = require("../utilities/messages");
-const { postSignupData } = require("../services/userService");
+const { postSignupData, postLoginData } = require("../services/userService");
 
 router.get("/", (req, res) => {
   res.render("home", { pagename: "Home" });
 });
 
 router.get("/login", (req, res) => {
+  res.render("login", { pagename: "Login" });
+});
+
+router.get("/sign-up", (req, res) => {
+  res.render("sign-up", { pagename: "Sign Up" });
+});
+router.get("/about", (req, res) => {
+  res.render("about", { pagename: "About" });
+});
+
+router.post("/login", async (req, res) => {
   const errors = validateLoginData(req.body);
   if (isEmpty(errors)) {
-    res.render("home", {
-      pagename: "Home",
-      message: messages.successfullLogin,
-    });
+    try {
+      const result = await postLoginData(req.body);
+      res.render("home", {
+        pagename: "Home",
+        message: "successfull login",
+      });
+    } catch (error) {
+      console.log(error.response.data);
+      res.render("login", {
+        pagename: "Login",
+        message: error.response.data.message,
+      });
+    }
   } else {
     res.render("login", {
       pagename: "Login",
       body: req.body,
       errs: errors,
-      messages: messages.failedLogin,
+      message: "failed login",
     });
   }
 });
 
-router.get("/sign-up", (req, res) => {
+router.post("/sign-up", (req, res) => {
   const errors = validateSignupData(req.body);
   if (isEmpty(errors)) {
     postSignupData(req.body)
       .then((result) => {
-        res.render("home", {
-          pagename: "Home",
-          message: messages.successfullSignup,
+        res.render("login", {
+          pagename: "login",
+          message: "successfull signup",
         });
       })
       .catch((error) => {
+        console.log(error.response.data);
         res.render("sign-up", {
           pagename: "Sign Up",
-          message: error.response.data.error.message,
+          message: error.response.data.message,
         });
       });
   } else {
@@ -50,13 +71,9 @@ router.get("/sign-up", (req, res) => {
       pagename: "Sign Up",
       body: req.body,
       errs: errors,
-      messages: messages.failedSignup,
+      message: "failed signup",
     });
   }
-});
-
-router.get("/about", (req, res) => {
-  res.render("about", { pagename: "About" });
 });
 
 module.exports = router;
